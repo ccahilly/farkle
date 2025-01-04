@@ -23,3 +23,5 @@ If a roll does not have any of the above combinations, it's called a "farkle" an
 for the turn. 
 
 Each roll where the player does not farkle, the player must choose one of the above combinations of dice to set aside. Then, they can either choose to roll the remaining dice or end their turn and keep their points. If there are no remaining dice, the player may pick up all 6 dice and roll again.
+
+When the first player reaches 10,000 points, every other player gets one turn where they can try to beat that players score. The player with the highest number of points wins.
