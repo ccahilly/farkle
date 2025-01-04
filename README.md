@@ -3,8 +3,8 @@ Optimal strategy for the game farkle
 
 # Rules of the game
 2+ players. Each player rolls starts their turn by rolling 6 dice. Points are allocated as follows:
-* One 5: 50 points
 * One 1: 100 points
+* One 5: 50 points
 * Three 1s: 300 points
 * Three 2s: 200 points
 * Three 3s: 300 points
