@@ -35,10 +35,15 @@ for i in range(1, NUM_DICE + 1):
 for i in range(1, NUM_DICE + 1):
     for j in range(1, NUM_DICE + 1):
         if i != j:
-            roll = tuple([i, i, i, i, j, j].sort())
+            roll = [i, i, i, i, j, j]
+            roll.sort()
+            roll = tuple(roll)
             POINT_SCORING_COMBINATIONS[roll] = 1500
 
 # Two triples
 for i in range(1, NUM_DICE + 1):
     for j in range(i + 1, NUM_DICE + 1):
         POINT_SCORING_COMBINATIONS[(i, i, i, j, j, j)] = 2500
+
+PLAYER_TYPES = ["Random", "Human"]
+VERBOSE = True
