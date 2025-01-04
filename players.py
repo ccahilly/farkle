@@ -7,6 +7,7 @@ class Player:
         self.turn_score = 0
         self.dice_kept = 0
     
+    # Returns the score for the turn
     def take_turn(self):
         roll = self.roll_dice()
         self.turn_score = 0
@@ -20,7 +21,12 @@ class Player:
             if self.roll_again(roll):
                 roll = self.roll_dice()
             else:
-                break
+                self.total_score += self.turn_score
+                return self.turn_score
+
+        # If the player farkles, the turn score is 0.
+        # Add nothing to the total score.
+        return 0
 
     def roll_dice(self):
         roll = {}
