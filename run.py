@@ -30,6 +30,7 @@ def main():
             # Get name from user
             name = input(f"Enter the name for player {i + 1}: ")
             players.append(HumanPlayer(name))
+    print()
 
     # Start the game
     game = Game(players)

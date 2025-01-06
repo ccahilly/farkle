@@ -61,24 +61,29 @@ class Player:
 
     # Roll is a Counter of integers representing the dice roll.
     # Returns the set of all possible dice to keep.
-    # Output type is a set of lists of tuples of integers.
+    # Output type is a set of sorted tuples of tuples of integers.
     def possible_dice_to_keep(self, roll):
         if len(roll) == 0:
             return set()
         
         possibilities = set()
         for combo in POINT_SCORING_COMBINATIONS.keys():
-            remaining_roll = roll - Counter(combo)
-            if not any(v < 0 for v in remaining_roll.values()):
-                sub_possibilities = self.possible_dice_to_keep(remaining_roll) # Set of sets of tuples
+            c = Counter(combo)
+            if all(roll[k] >= c[k] for k in c):
+                if DEBUG:
+                    print(f"Roll: {roll}")
+                    print(f"Combo: {combo}")
+                    print(f"Remaining roll: {roll - c}")
+
+                sub_possibilities = self.possible_dice_to_keep(roll - c) # Set of sets of tuples
 
                 if len(sub_possibilities) == 0:
-                    possibilities.add({combo})
+                    possibilities.add((combo,))
                 else:
-                    for sub_combo in sub_possibilities.keys():
-                        possibilities.add({combo} + sub_combo) # sub_combo is a set of tuples
+                    for sub_combo in sub_possibilities:
+                        possibilities.add(tuple(sorted((combo,) + sub_combo))) # sub_combo is a tuple of tuples
 
-        return possibilities # Set of sets of tuples
+        return possibilities # Set of tuples of tuples
     
     # Output is true or false
     def farkle(self, roll):
