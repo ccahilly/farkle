@@ -18,20 +18,23 @@ class Player:
 
         roll = self.roll_dice()
         if VERBOSE:
-            print(f"Initial roll: {roll}")
+            self.print_roll(roll)
 
         while not self.farkle(roll):
             dice_to_keep = self.pick_dice_to_keep(roll)
+            
             for dice in dice_to_keep:
                 self.dice_kept += len(dice)
                 self.turn_score += POINT_SCORING_COMBINATIONS[dice]
-            
+            self.print_move(dice_to_keep)
+
             if self.roll_again():
                 roll = self.roll_dice()
                 if VERBOSE:
-                    print(f"Roll: {roll}")
+                    self.print_roll(roll)
             else:
                 return self.turn_score
+        print("Farkle!")
 
         # If the player farkles, the turn score is 0.
         # Add nothing to the total score.
@@ -85,3 +88,36 @@ class Player:
     # Output is true or false
     def farkle(self, roll):
         return len(self.possible_dice_to_keep(roll)) == 0
+    
+    # Roll is a counter
+    def print_roll(self, roll):
+        if not VERBOSE:
+            return
+        
+        roll_str = "\nRoll: "
+        for element in roll.elements():
+            roll_str += f"{element} "
+        print(roll_str)
+    
+    # Possibilities is a set of tuples of tuples
+    def print_possibilities(self, possibilities):
+        if not VERBOSE:
+            return
+        
+        for i, possibility in enumerate(possibilities):
+            possibility_str = f"{i + 1}. "
+            for dice in possibility:
+                possibility_str += str(dice) + " "
+            print(possibility_str)
+
+    def print_move(self, dice):
+        if not VERBOSE:
+            return
+        
+        move_str = "Keeping "
+        points = 0
+        for die in dice:
+            move_str += f"{die} "
+            points += POINT_SCORING_COMBINATIONS[die]
+        move_str += f"for {points} points ({self.turn_score} total this turn)"
+        print(move_str)

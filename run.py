@@ -25,7 +25,7 @@ def main():
         player_type = int(player_type) - 1
 
         if PLAYER_TYPES[player_type] == "Random":
-            players.append(RandomPlayer())
+            players.append(RandomPlayer(name=f"Random Player {i + 1}"))
         elif PLAYER_TYPES[player_type] == "Human":
             # Get name from user
             name = input(f"Enter the name for player {i + 1}: ")
@@ -35,6 +35,6 @@ def main():
     # Start the game
     game = Game(players)
     winner = game.play()
-    print(f"The winner is player {winner + 1} ({players[winner].name})!")
+    print(f"The winner is player {players[winner].name}!")
 
 main()

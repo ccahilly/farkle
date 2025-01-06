@@ -47,4 +47,4 @@ for i in range(1, NUM_DICE + 1):
 
 PLAYER_TYPES = ["Random", "Human"]
 VERBOSE = True
-DEBUG = True
+DEBUG = False

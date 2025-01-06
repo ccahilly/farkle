@@ -14,7 +14,7 @@ class Game:
         
         first_to_ten_thousand = self.reached_win_threshold()
         if VERBOSE:
-            print(f"Player {first_to_ten_thousand + 1} ({self.players[first_to_ten_thousand].name}) reached 10,000 points!")
+            print(f"Player {first_to_ten_thousand + 1} ({self.players[first_to_ten_thousand].name}) reached 10,000 points!\n")
         
         # Allow all other players to have one more turn
         while self.current_player != first_to_ten_thousand:
@@ -38,8 +38,9 @@ class Game:
         self.current_player = (self.current_player + 1) % len(self.players)
 
         if VERBOSE:
+            print()
             for i, player in enumerate(self.players):
-                print(f"Player {i + 1} ({player.name}): {self.scores[i]} points")
+                print(f"{player.name}: {self.scores[i]} points")
             print()
 
     # Returns the index of the first player to reach 10,000 points; -1 otherwise
