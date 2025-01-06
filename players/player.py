@@ -4,7 +4,6 @@ from collections import Counter
 
 class Player:
     def __init__(self, name):
-        self.total_score = 0
         self.turn_score = 0
         self.dice_kept = 0
         self.name = name
@@ -16,15 +15,12 @@ class Player:
 
         self.turn_score = 0
         self.dice_kept = 0
-        
+
         roll = self.roll_dice()
-        if DEBUG:
+        if VERBOSE:
             print(f"Initial roll: {roll}")
 
         while not self.farkle(roll):
-            if VERBOSE:
-                print(f"Roll: {roll}")
-            
             dice_to_keep = self.pick_dice_to_keep(roll)
             for dice in dice_to_keep:
                 self.dice_kept += len(dice)
@@ -32,8 +28,9 @@ class Player:
             
             if self.roll_again():
                 roll = self.roll_dice()
+                if VERBOSE:
+                    print(f"Roll: {roll}")
             else:
-                self.total_score += self.turn_score
                 return self.turn_score
 
         # If the player farkles, the turn score is 0.

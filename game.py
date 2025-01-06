@@ -1,4 +1,4 @@
-from gameConstants import WIN_THRESHOLD, FIRST_TURN_THRESHOLD, VERBOSE
+from gameConstants import WIN_THRESHOLD, FIRST_TURN_THRESHOLD, VERBOSE, DEBUG
 
 class Game:
     def __init__(self, players):
@@ -29,13 +29,17 @@ class Game:
         
         # The first turn must be at least 500 points
         if self.scores[self.current_player] > 0 or score >= FIRST_TURN_THRESHOLD:
+            if DEBUG:
+                print(f"{player.name} scored {score} points")
+                print(f"self.scores[self.current_player] > 0: {self.scores[self.current_player] > 0}")
+                print(f"score >= FIRST_TURN_THRESHOLD: {score >= FIRST_TURN_THRESHOLD}")
             self.scores[self.current_player] += score
         
         self.current_player = (self.current_player + 1) % len(self.players)
 
         if VERBOSE:
             for i, player in enumerate(self.players):
-                print(f"Player {i + 1} ({player.name}): {player.total_score} points")
+                print(f"Player {i + 1} ({player.name}): {self.scores[i]} points")
             print()
 
     # Returns the index of the first player to reach 10,000 points; -1 otherwise
