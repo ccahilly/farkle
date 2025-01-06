@@ -15,6 +15,8 @@ class Player:
             print(f"{self.name}'s turn")
 
         self.turn_score = 0
+        self.dice_kept = 0
+        
         roll = self.roll_dice()
         if DEBUG:
             print(f"Initial roll: {roll}")
@@ -75,13 +77,11 @@ class Player:
                     print(f"Combo: {combo}")
                     print(f"Remaining roll: {roll - c}")
 
+                possibilities.add((combo,))
                 sub_possibilities = self.possible_dice_to_keep(roll - c) # Set of sets of tuples
 
-                if len(sub_possibilities) == 0:
-                    possibilities.add((combo,))
-                else:
-                    for sub_combo in sub_possibilities:
-                        possibilities.add(tuple(sorted((combo,) + sub_combo))) # sub_combo is a tuple of tuples
+                for sub_combo in sub_possibilities:
+                    possibilities.add(tuple(sorted((combo,) + sub_combo))) # sub_combo is a tuple of tuples
 
         return possibilities # Set of tuples of tuples
     
