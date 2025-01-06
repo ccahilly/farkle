@@ -1,5 +1,6 @@
-from gameConstants import NUM_DICE, POINT_SCORING_COMBINATIONS, VERBOSE
+from gameConstants import NUM_DICE, POINT_SCORING_COMBINATIONS, VERBOSE, DEBUG
 import random
+from collections import Counter
 
 class Player:
     def __init__(self, name):
@@ -15,6 +16,8 @@ class Player:
 
         self.turn_score = 0
         roll = self.roll_dice()
+        if DEBUG:
+            print(f"Initial roll: {roll}")
 
         while not self.farkle(roll):
             if VERBOSE:
@@ -35,17 +38,17 @@ class Player:
         # Add nothing to the total score.
         return 0
 
-    # Output type is a set of integers
+    # Output type is a Counter of integers (keys 1-6)
     def roll_dice(self):
-        roll = set()
+        roll = Counter()
         
         # If all dice are kept, reset the kept dice count
         if self.dice_kept == NUM_DICE:
             self.dice_kept = 0
 
         for _ in range(NUM_DICE - self.dice_kept):
-            roll.add(random.randint(1, 6))
-        
+            roll[random.randint(1, 6)] += 1
+
         return roll
     
     # Output type is a set of tuples of integers and the associated points
@@ -56,17 +59,18 @@ class Player:
     def roll_again(self):
         raise NotImplementedError("Subclasses must implement this method")
 
-    # Roll is a set of integers representing the dice roll.
+    # Roll is a Counter of integers representing the dice roll.
     # Returns the set of all possible dice to keep.
-    # Output type is a set of sets of tuples of integers.
+    # Output type is a set of lists of tuples of integers.
     def possible_dice_to_keep(self, roll):
         if len(roll) == 0:
             return set()
         
         possibilities = set()
         for combo in POINT_SCORING_COMBINATIONS.keys():
-            if set(combo) in roll:
-                sub_possibilities = self.possible_dice_to_keep_rec(roll - set(combo)) # Set of sets of tuples
+            remaining_roll = roll - Counter(combo)
+            if not any(v < 0 for v in remaining_roll.values()):
+                sub_possibilities = self.possible_dice_to_keep(remaining_roll) # Set of sets of tuples
 
                 if len(sub_possibilities) == 0:
                     possibilities.add({combo})
