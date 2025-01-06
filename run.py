@@ -1,7 +1,12 @@
-from gameConstants import MIN_PLAYERS, PLAYER_TYPES
+from gameConstants import MIN_PLAYERS, PLAYER_TYPES, VERBOSE
 from players.randomPlayer import RandomPlayer
 from players.humanPlayer import HumanPlayer
 from game import Game
+
+def print_win_rates(win_counts, players):
+    print(f"\nWin rates for each player after {sum(win_counts)} games:")
+    for i, player in enumerate(players):
+        print(f"{player.name}: {win_counts[i] / sum(win_counts):.3f}")
 
 def main():
     print("Welcome to Farkle!")
@@ -32,9 +37,23 @@ def main():
             players.append(HumanPlayer(name))
     print()
 
-    # Start the game
-    game = Game(players)
-    winner = game.play()
-    print(f"The winner is player {players[winner].name}!")
+    # Enter the number of games to play
+    num_games = input("Enter the number of games to play: ")
+    while not num_games.isdigit():
+        num_games = input("Please enter a valid number.")
+    num_games = int(num_games)
+
+    win_counts = [0] * num_players
+
+    for i in range(num_games):
+        # Start the game
+        game = Game(players)
+        winner = game.play()
+        win_counts[winner] += 1
+        if VERBOSE:
+            print(f"The winner is {players[winner].name}!")
+
+        if (i + 1) % 100 == 0:
+            print_win_rates(win_counts, players)
 
 main()

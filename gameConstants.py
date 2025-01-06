@@ -46,5 +46,5 @@ for i in range(1, NUM_DICE + 1):
         POINT_SCORING_COMBINATIONS[(i, i, i, j, j, j)] = 2500
 
 PLAYER_TYPES = ["Random", "Human"]
-VERBOSE = True
+VERBOSE = False
 DEBUG = False
