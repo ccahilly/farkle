@@ -34,7 +34,6 @@ class Player:
                     self.print_roll(roll)
             else:
                 return self.turn_score
-        print("Farkle!")
 
         # If the player farkles, the turn score is 0.
         # Add nothing to the total score.
@@ -87,7 +86,10 @@ class Player:
     
     # Output is true or false
     def farkle(self, roll):
-        return len(self.possible_dice_to_keep(roll)) == 0
+        f = len(self.possible_dice_to_keep(roll)) == 0
+        if VERBOSE and f:
+            print("Farkle!")
+        return f
     
     # Roll is a counter
     def print_roll(self, roll):
