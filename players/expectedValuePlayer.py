@@ -35,22 +35,23 @@ class ExpectedValuePlayer(Player):
 
     def get_expected_value_rec(self, num_dice, evs):
         if DEBUG:
-            print(f"Getting expected value for {num_dice} dice")
+            print(f"\nGetting expected value for {num_dice} dice")
+            print(f"Looing at rolls to actions: {self.rolls_to_actions}")
 
-        if evs[num_dice] is not [np.nan, np.nan]:
+        if not (np.isnan(evs[num_dice]).all()):
             return evs[num_dice]
         
         ev = np.zeros(2)
+        new_rolls = dict()
         for roll in self.rolls_to_actions:
             if DEBUG:
-                print(f"Roll: {roll}")
+                print(f"Roll from self.rolls_to_actions: {roll}")
 
             if len(roll) == num_dice - 1:
                 for i in range(1, 7):
-                    new_roll = roll + (i,)
-                    new_roll.sort()
-
-                    possible_plays = self.possible_dice_to_keep(Counter(new_roll))
+                    new_roll = tuple(sorted(roll + (i,)))
+                    
+                    possible_plays = list(self.possible_dice_to_keep(Counter(new_roll)))
                     play_values = np.zeros((len(possible_plays), 2))
                     
                     for i, play in enumerate(possible_plays):
@@ -61,11 +62,18 @@ class ExpectedValuePlayer(Player):
 
                         play_values[i] += self.get_expected_value_rec(updated_num_dice, evs)
 
-                    # Ignore in the case of a farkle
-                    if len(possible_plays) > 0:
-                        max_indices = np.argmax(play_values, axis=0)
-                        if max_indices[0] == max_indices[1]:
-                            ev += play_values[max_indices[0]]
+                    if len(possible_plays) == 0:
+                        new_rolls[new_roll] = () # No move in the case of a farkle
+                    else:
+                        max_raw_points = np.argmax(play_values, axis=0)[0]
+                        max_r_indices = np.where(play_values[:, 1] == np.max(play_values[:, 1]))[0]
+                        if max_raw_points in max_r_indices:
+                            ev += play_values[max_raw_points]
+                            new_rolls[new_roll] = possible_plays[max_raw_points]
                         else:
-                            raise ValueError(f"Best play not clear without knowing the value of r6: {new_roll}")
+                            raise ValueError(f"Best play not clear without knowing the value of r6: {new_roll} {play_values} {possible_plays}")
+        if DEBUG:
+            print(f"Expected value counts: {ev}")
+        
         evs[num_dice] = ev / 6 ** num_dice
+        self.rolls_to_actions.update(new_rolls)

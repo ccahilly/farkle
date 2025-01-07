@@ -72,9 +72,9 @@ class Player:
             c = Counter(combo)
             if all(roll[k] >= c[k] for k in c):
                 if DEBUG:
-                    print(f"Roll: {roll}")
-                    print(f"Combo: {combo}")
-                    print(f"Remaining roll: {roll - c}")
+                    print(f"Roll in possible dice to keep: {roll}")
+                    print(f"Valid dice to keep: {combo}")
+                    print(f"Remaining dice: {roll - c}")
 
                 possibilities.add((combo,))
                 sub_possibilities = self.possible_dice_to_keep(roll - c) # Set of sets of tuples
