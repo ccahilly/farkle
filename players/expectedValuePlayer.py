@@ -1,6 +1,6 @@
 from .player import Player
 from collections import Counter
-from gameConstants import POINT_SCORING_COMBINATIONS
+from gameConstants import POINT_SCORING_COMBINATIONS, DEBUG
 import numpy as np
 
 class ExpectedValuePlayer(Player):
@@ -16,6 +16,9 @@ class ExpectedValuePlayer(Player):
         pass
 
     def fill_rolls_to_actions(self):
+        if DEBUG:
+            print("Filling rolls to actions")
+            
         expected_values_in_terms_of_r6 = np.array([[0,1], 
                                                    [np.nan, np.nan], 
                                                    [np.nan, np.nan], 
@@ -29,6 +32,9 @@ class ExpectedValuePlayer(Player):
             print(f"Expected value for {num_dice} dice in terms of r6: {expected_values_in_terms_of_r6[num_dice]}")
 
     def get_expected_value_rec(self, num_dice, evs):
+        if DEBUG:
+            print(f"Getting expected value for {num_dice} dice")
+
         if evs[num_dice] is not [np.nan, np.nan]:
             return evs[num_dice]
         
@@ -38,6 +44,9 @@ class ExpectedValuePlayer(Player):
                 for i in range(1, 7):
                     new_roll = roll + (i,)
                     new_roll.sort()
+
+                    if DEBUG:
+                        print(f"Roll: {new_roll}")
 
                     possible_plays = self.possible_dice_to_keep(Counter(new_roll))
                     play_values = np.zeros((len(possible_plays), 2))
