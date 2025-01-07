@@ -33,7 +33,7 @@ class ExpectedValuePlayer(Player):
             return evs[num_dice]
         
         ev = np.zeros(2)
-        for roll in self.possible_rolls:
+        for roll in self.rolls_to_actions:
             if len(roll) == num_dice - 1:
                 for i in range(1, 7):
                     new_roll = roll + (i,)
