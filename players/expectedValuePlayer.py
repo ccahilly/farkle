@@ -18,6 +18,8 @@ class ExpectedValuePlayer(Player):
     def fill_rolls_to_actions(self):
         if DEBUG:
             print("Filling rolls to actions")
+            print(f"Rolls to actions: {self.rolls_to_actions}")
+            print(f"Length of rolls to actions: {len(self.rolls_to_actions)}")
             
         expected_values_in_terms_of_r6 = np.array([[0,1], 
                                                    [np.nan, np.nan], 
@@ -40,13 +42,13 @@ class ExpectedValuePlayer(Player):
         
         ev = np.zeros(2)
         for roll in self.rolls_to_actions:
+            if DEBUG:
+                print(f"Roll: {roll}")
+
             if len(roll) == num_dice - 1:
                 for i in range(1, 7):
                     new_roll = roll + (i,)
                     new_roll.sort()
-
-                    if DEBUG:
-                        print(f"Roll: {new_roll}")
 
                     possible_plays = self.possible_dice_to_keep(Counter(new_roll))
                     play_values = np.zeros((len(possible_plays), 2))
